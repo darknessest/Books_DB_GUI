@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.LoginWindowController">
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="300.0">
+         <children>
+            <PasswordField fx:id="PasswordField" disable="true" layoutX="65.0" layoutY="55.0" promptText="password" />
+            <TextField fx:id="UsernameField" disable="true" layoutX="65.0" layoutY="24.0" promptText="username" />
+            <CheckBox fx:id="AdminCheckBox" layoutX="74.0" layoutY="90.0" mnemonicParsing="false" onAction="#setAdminCheckBox" text="admin" />
+            <Button fx:id="StartButton" layoutX="122.0" layoutY="139.0" mnemonicParsing="false" onAction="#Login" text="Start" textAlignment="CENTER" wrapText="true" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="40.0" layoutY="178.0" prefHeight="17.0" prefWidth="212.0" textAlignment="CENTER" textFill="RED" />
+         </children>
+      </AnchorPane>
+   </children>
+</GridPane>

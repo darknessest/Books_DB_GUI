@@ -4121,7 +4121,7 @@ nn-nn-07 - Version 3.1.15
 	  to control when/where this info gets logged (see docs for more
 	  info).
 
-	- ServerPreparedStatements weren't actually de-allocating
+	- ServerPreparedStatements weren't actually description-allocating
 	  server-side resources when .close() was called.
 
 	- Added 'logSlowQueries' property, along with property

@@ -3,26 +3,19 @@ package app;
 import java.sql.*;
 
 public class db_driver {
+    private static Statement stmt;
 
-    public static void main(String[] args) {
-        try (
-                // Step 1: Allocate a database 'Connection' object
-                Connection conn = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/bookshop?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
-                        "buyer", "");   // For MySQL only
-                // The format is: "jdbc:mysql://hostname:port/databaseName", "username", "password"
+    public static void showBooks() {
 
-                // Step 2: Allocate a 'Statement' object in the Connection
-                Statement stmt = conn.createStatement();
-        ) {
-            // Step 3: Execute a SQL SELECT query. The query result is returned in a 'ResultSet' object.
-            String strSelect = "select * from book_info";
-            System.out.println("The SQL statement is: " + strSelect + "\n"); // Echo For debugging
+        // Step 3: Execute a SQL SELECT query. The query result is returned in a 'ResultSet' object.
+        String strSelect = "select * from book_info";
+        System.out.println("The SQL statement is: " + strSelect + "\n"); // Echo For debugging
 
-            ResultSet rset = stmt.executeQuery(strSelect);
+        ResultSet rset = null;
+        try {
+            rset = stmt.executeQuery(strSelect);
 
             // Step 4: Process the ResultSet by scrolling the cursor forward via next().
-            //  For each row, retrieve the contents of the cells with getXxx(columnName).
             System.out.println("The records selected are:");
             int rowCount = 0;
             while (rset.next()) {   // Move the cursor to the next row, return false if no more row
@@ -34,10 +27,29 @@ public class db_driver {
                 System.out.println(ISBN + "\t" + name + "\t" + author + "\t" + date + "\nDescription:\n" + desc + "\n");
                 ++rowCount;
             }
-            System.out.println("Total number of records = " + rowCount);
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println("Total number of records = " + rowCount);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+    static boolean connectToUser(String user, String pass) {
+        Connection conn = null;   // For MySQL only
+        try {
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/bookshop?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
+                    user, pass);
+
+
+            // Step 2: Allocate a 'Statement' object in the Connection
+
+            stmt = conn.createStatement();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
