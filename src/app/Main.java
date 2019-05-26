@@ -18,10 +18,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-//        Parent root = FXMLLoader.load(getClass().getResource("main_window.fxml"));
-//        primaryStage.setTitle("Book Store");
-//        primaryStage.setScene(new Scene(root, 1200, 800));
-//        primaryStage.show();
         Parent root = FXMLLoader.load(getClass().getResource("login_window.fxml"));
         primaryStage.setTitle("Login");
         primaryStage.setScene(new Scene(root, 300, 200));
@@ -32,7 +28,6 @@ public class Main extends Application {
 
     private void startMainProgramm() {
         Parent root = null;
-        System.out.println("running this code");
         try {
             root = FXMLLoader.load(getClass().getResource("main_window.fxml"));
         } catch (IOException e) {

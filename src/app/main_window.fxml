@@ -25,10 +25,10 @@
                      <children>
                         <VBox layoutX="5.0" layoutY="5.0">
                            <children>
-                              <ListView fx:id="LV" minHeight="692.0" minWidth="475.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                              <ListView fx:id="LV" minHeight="692.0" minWidth="475.0" onMouseClicked="#chooseItemInList" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
                               <ToolBar fx:id="AdminToolbar" disable="true" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0">
                                 <items>
-                                  <Button fx:id="PlusButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="+" textAlignment="CENTER">
+                                  <Button fx:id="AdminPlusButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="+" textAlignment="CENTER">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -51,17 +51,17 @@
                               <Font size="18.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="PriceField" disable="true" layoutX="140.0" layoutY="173.0" prefHeight="45.0" prefWidth="520.0" promptText="Price">
+                        <TextField fx:id="PriceField" disable="true" layoutX="140.0" layoutY="172.0" prefHeight="45.0" prefWidth="520.0" promptText="Price">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="ISBNField" disable="true" layoutX="140.0" layoutY="229.0" prefHeight="45.0" prefWidth="520.0" promptText="ISBN">
+                        <TextField fx:id="ISBNField" disable="true" layoutX="140.0" layoutY="234.0" prefHeight="45.0" prefWidth="520.0" promptText="ISBN">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="DescriptionField" alignment="TOP_LEFT" disable="true" layoutX="140.0" layoutY="296.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="306.0" prefWidth="520.0" promptText="Description">
+                        <TextField fx:id="DescriptionField" alignment="TOP_LEFT" disable="true" layoutX="140.0" layoutY="358.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="280.0" prefWidth="520.0" promptText="Description">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -76,6 +76,11 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
+                        <TextField fx:id="DateField" disable="true" layoutX="140.0" layoutY="296.0" prefHeight="45.0" prefWidth="520.0" promptText="Date">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </TextField>
                      </children></AnchorPane>
               </items>
             </SplitPane>
@@ -84,7 +89,7 @@
                   <Font size="17.0" />
                </font>
             </TextField>
-            <Button layoutX="775.0" layoutY="6.0" mnemonicParsing="false" text="search">
+            <Button layoutX="775.0" layoutY="6.0" mnemonicParsing="false" onAction="#Search" text="search">
                <font>
                   <Font size="18.0" />
                </font>
@@ -99,7 +104,7 @@
                   <Font size="17.0" />
                </font>
             </TextField>
-            <TextField fx:id="AuthorNameSearchField1" layoutX="576.0" layoutY="6.0" maxWidth="-Infinity" minHeight="35.0" prefHeight="35.0" prefWidth="163.0" promptText="Price">
+            <TextField fx:id="PriceSearchField" layoutX="576.0" layoutY="6.0" maxWidth="-Infinity" minHeight="35.0" prefHeight="35.0" prefWidth="163.0" promptText="Price">
                <font>
                   <Font size="17.0" />
                </font>

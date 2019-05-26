@@ -8,6 +8,7 @@ public class Book {
     private String author;
     private String description;
     private Date date;
+    private double price;
 
     public Book(String ISBN, String name, String author, String description, Date date) {
         this.ISBN = ISBN;
@@ -15,6 +16,18 @@ public class Book {
         this.author = author;
         this.description = description;
         this.date = date;
+    }
+
+    public Book() {
+        this.ISBN = "";
+        this.name = "";
+        this.author = "";
+        this.description = "";
+        this.date = new Date(1970, 1, 1);
+    }
+
+    public Book(String name) {
+        this.name = name;
     }
 
     public String getISBN() {
@@ -35,5 +48,9 @@ public class Book {
 
     public Date getDate() {
         return date;
+    }
+
+    public double getPrice() {
+        return price;
     }
 }

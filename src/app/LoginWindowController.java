@@ -8,13 +8,15 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static app.db_driver.AdminMode;
 import static app.db_driver.connectToUser;
 
 
 public class LoginWindowController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        LoginStatusLabel = new Label();
+        LoginStatusLabel.setVisible(true);
     }
 
     // LOGIN WINDOW
@@ -41,26 +43,29 @@ public class LoginWindowController implements Initializable {
         }
     }
 
+    // on star button press
     @FXML
     void Login() {
         if (AdminCheckBox.isSelected()) {
             if (!(UsernameField.getText().isEmpty() && PasswordField.getText().isEmpty()))
                 if (!connectToUser(UsernameField.getText(), PasswordField.getText()))
                     LoginStatusLabel.setText("Wrong password or username");
-                else
+                else {
                     LoginStatusLabel.setText("");
+                    AdminMode = true;
+                    System.out.println("Admin mode");
+                }
             //successfully logged in
         }
         //open next window, close this one
 
 
-        else
+        else {
             connectToUser("buyer", "");
-
+            AdminMode = false;
+        }
+        LoginStatusLabel.setText("Loading database");
         ((Stage) StartButton.getScene().getWindow()).hide();
 
-
     }
-
-
 }
