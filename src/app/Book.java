@@ -16,6 +16,7 @@ public class Book {
         this.author = author;
         this.description = description;
         this.date = date;
+//        this.price = price;
     }
 
     public Book() {
@@ -23,34 +24,43 @@ public class Book {
         this.name = "";
         this.author = "";
         this.description = "";
-        this.date = new Date(1970, 1, 1);
+        this.date = new Date(0, 0, 1);
     }
 
-    public Book(String name) {
+    Book(String name) {
         this.name = name;
     }
 
-    public String getISBN() {
+    String getISBN() {
         return ISBN;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public String getAuthor() {
+    String getAuthor() {
         return author;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public Date getDate() {
+    Date getDate() {
         return date;
     }
 
-    public double getPrice() {
+    double getPrice() {
         return price;
+    }
+
+    void setValues(String ISBN, String name, String author, String description, Date date, Double price) {
+        this.ISBN = ISBN;
+        this.name = name;
+        this.author = author;
+        this.description = description;
+        this.date = date;
+        this.price = price;
     }
 }

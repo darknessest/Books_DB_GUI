@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -24,21 +24,23 @@ public class MainWindowController implements Initializable {
         LV.setItems(FXCollections.observableArrayList(getBooks_names(getAll_books())));
         current_index = -1;
         LocalBooksList.addAll(getAll_books());
+
         if (!AdminMode) {
-            System.out.println("1");
+            // Buyer mode
             AdminToolbar.setVisible(false);
-            AdminEditButton.setVisible(false);
             AdminSaveButton.setVisible(false);
-        } else {
-            System.out.println("2");
+        } else
+            // admin mode
             AdminToolbar.setDisable(false);
-            // Edit and Save are opposite
-            AdminEditButton.setDisable(false);
-            AdminSaveButton.setDisable(true);
-        }
+
     }
 
+
+    //************************************
+    //***           VARIABLES          ***
+    //************************************
     private int current_index;
+    private boolean editingModeIsOn;
     private List<Book> LocalBooksList = new ArrayList<>();
 
     @FXML
@@ -51,7 +53,13 @@ public class MainWindowController implements Initializable {
     TextField BookNameField, AuthorField, PriceField, ISBNField, DateField, DescriptionField;
     @FXML
     TextField BookNameSearchField, ISBNSearchField, AuthorNameSearchField, PriceSearchField;
+    @FXML
+    Label StatusLabel;
 
+
+    //************************************
+    //***           FUNCTIONS          ***
+    //************************************
     @FXML
     public void chooseItemInList() {
         current_index = LV.getSelectionModel().getSelectedIndex();
@@ -81,21 +89,77 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    public void EditBook() {
+    public void Editing() {
+        // button was pressed already, then turn off
+        AdminSaveButton.setDisable(editingModeIsOn);
+        // else turn on
+        BookNameField.setDisable(editingModeIsOn);
+        AuthorField.setDisable(editingModeIsOn);
+        PriceField.setDisable(editingModeIsOn);
+        ISBNField.setDisable(editingModeIsOn);
+        DateField.setDisable(editingModeIsOn);
+        DescriptionField.setDisable(editingModeIsOn);
 
+        editingModeIsOn = !editingModeIsOn;
+        if (editingModeIsOn)
+            StatusLabel.setText("");
     }
 
     @FXML
     public void SaveBook() {
+        boolean flagToUpdate = false;
 
+        if (!BookNameField.getText().equals(LocalBooksList.get(current_index).getName()))
+            flagToUpdate = true;
+        if (ISBNField.getText().isEmpty()) {
+            StatusLabel.setText("ISBN can't be empty");
+        } else if (BookNameField.getText().isEmpty()) {
+            StatusLabel.setText("Book name can't be empty");
+        } else {
+            StatusLabel.setText("");
+            LocalBooksList.get(current_index).setValues(
+                    ISBNField.getText(),
+                    BookNameField.getText(),
+                    AuthorField.getText(),
+                    DescriptionField.getText(),
+                    Date.valueOf(DateField.getText()),
+                    Double.valueOf(PriceField.getText()));
+            // is quite resource wasteful, so added the flag
+            if (flagToUpdate)
+                updateListView(getBooks_names(LocalBooksList));
+        }
     }
 
     @FXML
     public void AddNewBook() {
+        if (!editingModeIsOn)
+            Editing();
+        current_index = LocalBooksList.size();
 
+        LocalBooksList.add(new Book());
+        updateListView(getBooks_names(LocalBooksList));
+        System.out.println(current_index);
+        LV.getSelectionModel().select(current_index);
+        previewBook(LocalBooksList.get(current_index));
+        StatusLabel.setText("New book has been created. You can edit now.");
     }
 
+    @FXML
+    public void SaveDatabase() {
+        // TODO ask for db saving on app closing
+        // check if all constraints are ok
+//            for (Book book : LocalBooksList) {
+//                if(book.getISBN().isEmpty()){
+//                    StatusLabel.setText("Name is em");
+//                }
+//            }
+        LocalBooksList.forEach(x -> insertValues(x.getISBN(), x.getName(),
+                x.getAuthor(), x.getDescription(), x.getDate(), x.getPrice()));
+    }
 
+    //************************************
+    //***       SERVING METHODS        ***
+    //************************************
     private void updateListView(ArrayList<String> books_names_list) {
         LV.getItems().clear();
         LV.setItems(FXCollections.observableArrayList(books_names_list));
@@ -104,7 +168,7 @@ public class MainWindowController implements Initializable {
     private void previewBook(Book book) {
         BookNameField.setText(book.getName());
         AuthorField.setText(book.getAuthor());
-//        PriceField.setText(Double.toString(book.getPrice()));
+        PriceField.setText(Double.toString(book.getPrice()));
         ISBNField.setText(book.getISBN());
         DateField.setText(book.getDate().toString());
         DescriptionField.setText(book.getDescription());
