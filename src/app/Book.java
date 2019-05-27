@@ -10,13 +10,13 @@ public class Book {
     private Date date;
     private double price;
 
-    public Book(String ISBN, String name, String author, String description, Date date) {
+    public Book(String ISBN, String name, String author, Double price, String description, Date date) {
         this.ISBN = ISBN;
         this.name = name;
         this.author = author;
+        this.price = price;
         this.description = description;
         this.date = date;
-//        this.price = price;
     }
 
     public Book() {
@@ -55,12 +55,13 @@ public class Book {
         return price;
     }
 
-    void setValues(String ISBN, String name, String author, String description, Date date, Double price) {
+    void setValues(String ISBN, String name, String author, Double price, String description, Date date) {
         this.ISBN = ISBN;
         this.name = name;
         this.author = author;
+        this.price = price;
         this.description = description;
         this.date = date;
-        this.price = price;
+
     }
 }

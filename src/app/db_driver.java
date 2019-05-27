@@ -13,7 +13,8 @@ public class db_driver {
     static void loadBooks() {
 
         // Step 3: Execute a SQL SELECT query. The query result is returned in a 'ResultSet' object.
-        String strSelect = "select * from book_info";
+        String strSelect = "select I.ISBN, I.name, I.author, I.description, I.publishing_date, S.price " +
+                "from book_info as I, book_stock as S where S.ISBN=I.ISBN order by name";
         System.out.println("The SQL statement is: " + strSelect + "\n"); // Echo For debugging
 
         ResultSet rset = null;
@@ -28,11 +29,12 @@ public class db_driver {
                 String ISBN = rset.getString("ISBN");
                 String name = rset.getString("name");
                 String author = rset.getString("author");
+                double price = rset.getDouble("price");
                 String desc = rset.getString("description");
                 Date date = rset.getDate("publishing_date");
                 // TODO add price field
 
-                all_books.add(new Book(ISBN, name, author, desc, date));
+                all_books.add(new Book(ISBN, name, author, price, desc, date));
                 System.out.println(ISBN + "\t" + name + "\t" + author + "\t" + date + "\nDescription:\n" + desc + "\n");
             }
 
@@ -43,7 +45,6 @@ public class db_driver {
 
 
     static boolean connectToUser(String user, String pass) {
-
         try {
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/bookshop?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC",
@@ -60,12 +61,14 @@ public class db_driver {
         return false;
     }
 
-    static void insertValues(String ISBN, String name, String author, String desc, Date date, Double price) {
-        System.out.println(ISBN);
+    static int insertRecord(String ISBN, String name, String author, String desc, Date date, Double price) {
+        System.out.println("inserting " + ISBN);
         int i = 0;
         try {
             // TODO allow to add null values
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO book_info(ISBN, name, author, description, publishing_date) VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO book_info(ISBN, name, author, description, publishing_date) " +
+                            "VALUES(?, ?, ?, ?, ?)");
             statement.setString(1, ISBN);
             statement.setString(2, name);
             statement.setString(3, author);
@@ -74,11 +77,59 @@ public class db_driver {
 
             i = statement.executeUpdate();
 
-
+            // trigger has already inserted new data, so just need to update one cell
+            statement = conn.prepareStatement("update book_stock SET price = ? " +
+                    "where ISBN = ?");
+            statement.setDouble(1, price);
+            statement.setString(2, ISBN);
+            i = statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(i + "executed");
+        return i;
+    }
+
+    static int updateRecord(String ISBN, String name, String author, String desc, Date date, Double price) {
+        System.out.println("updating " + ISBN);
+        int i = 0;
+        try {
+            // TODO allow to add null values
+            PreparedStatement statement = conn.prepareStatement("UPDATE book_info SET " +
+                    "name = ?, author = ?, description = ?, publishing_date = ? " +
+                    "WHERE ISBN = ?");
+            statement.setString(1, name);
+            statement.setString(2, author);
+            statement.setString(3, desc);
+            statement.setDate(4, date);
+            statement.setString(5, ISBN);
+
+            //TODO update price table too
+            i = statement.executeUpdate();
+
+            statement = conn.prepareStatement("update book_stock SET price = ? " +
+                    "where ISBN = ?");
+            statement.setDouble(1, price);
+            statement.setString(2, ISBN);
+
+            i = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return i;
+    }
+
+    static void deleteRecord(String ISBN) {
+        System.out.println("deleting " + ISBN);
+        try {
+            // TODO allow to add null values
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM book_info " +
+                    "WHERE ISBN = ?");
+            statement.setString(1, ISBN);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
