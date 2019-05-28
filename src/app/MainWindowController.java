@@ -34,10 +34,13 @@ public class MainWindowController implements Initializable {
             // Buyer mode
             AdminToolbar.setVisible(false);
             AdminSaveButton.setVisible(false);
-        } else
+            AdminDeleteButton.setVisible(false);
+            BuyButton.setDisable(false);
+        } else {
             // admin mode
             AdminToolbar.setDisable(false);
-
+            BuyButton.setVisible(false);
+        }
     }
 
 
@@ -55,6 +58,8 @@ public class MainWindowController implements Initializable {
     @FXML
     ToolBar AdminToolbar;
     @FXML
+    Button BuyButton;
+    @FXML
     Button AdminPlusButton, AdminEditButton, AdminSaveButton, AdminDeleteButton;
     @FXML
     TextField BookNameField, AuthorField, PriceField, ISBNField, DateField, DescriptionField;
@@ -69,6 +74,7 @@ public class MainWindowController implements Initializable {
     //************************************
     @FXML
     public void chooseItemInList() {
+        StatusLabel.setText("");
         current_index = LV.getSelectionModel().getSelectedIndex();
         previewBook(LocalBooksList.get(current_index));
         System.out.println(current_index);
@@ -93,6 +99,14 @@ public class MainWindowController implements Initializable {
             }
         }
         updateListView(getBooks_names(LocalBooksList));
+    }
+
+    @FXML
+    public void BuyBook() {
+        if(checkBookAval(LocalBooksList.get(current_index).getISBN()))
+            buyBook(LocalBooksList.get(current_index).getISBN());
+        else
+            StatusLabel.setText("Sorry this book is currently out of stock");
     }
 
     @FXML
@@ -189,6 +203,7 @@ public class MainWindowController implements Initializable {
 //                x.getAuthor(), x.getDescription(), x.getDate(), x.getPrice()));
     }
 
+
     @FXML
     public void DeleteBook() {
         // deletes directly without saving database !!
@@ -278,9 +293,6 @@ public class MainWindowController implements Initializable {
             LocalBooksList.remove(temp_size);
     }
 
-    //*******************************
-    //      Serving Functions       *
-    //*******************************
     static ArrayList<String> getBooks_names(List<Book> all_books) {
 
         ArrayList<String> listofnames = new ArrayList<>();

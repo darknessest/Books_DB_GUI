@@ -35,7 +35,7 @@ public class db_driver {
                 // TODO add price field
 
                 all_books.add(new Book(ISBN, name, author, price, desc, date));
-                System.out.println(ISBN + "\t" + name + "\t" + author + "\t" + date + "\nDescription:\n" + desc + "\n");
+//                System.out.println(ISBN + "\t" + name + "\t" + author + "\t" + date + "\nDescription:\n" + desc + "\n");
             }
 
         } catch (SQLException e) {
@@ -132,6 +132,31 @@ public class db_driver {
         }
     }
 
+    static void buyBook(String ISBN) {
+        try {
+            PreparedStatement statement = conn.prepareStatement("update book_stock SET qty_in = qty_in - 1,  qty_sold = qty_sold + 1 " +
+                    "WHERE ISBN = ?");
+            statement.setString(1, ISBN);
+            System.out.println("buying " + ISBN);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    static boolean checkBookAval(String ISBN) {
+        try {
+            PreparedStatement statement = conn.prepareStatement("select isAval from book_stock " +
+                    "WHERE ISBN = ?");
+            statement.setString(1, ISBN);
+            System.out.println("checking " + ISBN);
+            ResultSet rset = statement.executeQuery();
+            if(rset.next())
+                return rset.getBoolean("isAval");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     static ArrayList<Book> getAll_books() {
         return all_books;
