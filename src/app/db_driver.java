@@ -13,8 +13,9 @@ public class db_driver {
     static void loadBooks() {
 
         // Step 3: Execute a SQL SELECT query. The query result is returned in a 'ResultSet' object.
-        String strSelect = "select I.ISBN, I.name, I.author, I.description, I.publishing_date, S.price " +
-                "from book_info as I, book_stock as S where S.ISBN=I.ISBN order by name";
+//        String strSelect = "select I.ISBN, I.name, I.author, I.description, I.publishing_date, S.price " +
+//                "from book_info as I, book_stock as S where S.ISBN=I.ISBN order by name";
+        String strSelect = "call getAllBooksInfo()";
         System.out.println("The SQL statement is: " + strSelect + "\n"); // Echo For debugging
 
         ResultSet rset = null;
@@ -32,7 +33,6 @@ public class db_driver {
                 double price = rset.getDouble("price");
                 String desc = rset.getString("description");
                 Date date = rset.getDate("publishing_date");
-                // TODO add price field
 
                 all_books.add(new Book(ISBN, name, author, price, desc, date));
 //                System.out.println(ISBN + "\t" + name + "\t" + author + "\t" + date + "\nDescription:\n" + desc + "\n");
@@ -143,15 +143,16 @@ public class db_driver {
             e.printStackTrace();
         }
     }
+
     static boolean checkBookAval(String ISBN) {
         try {
-            PreparedStatement statement = conn.prepareStatement("select isAval from book_stock " +
+            PreparedStatement statement = conn.prepareStatement("select qty_in from book_stock " +
                     "WHERE ISBN = ?");
             statement.setString(1, ISBN);
             System.out.println("checking " + ISBN);
             ResultSet rset = statement.executeQuery();
-            if(rset.next())
-                return rset.getBoolean("isAval");
+            if (rset.next())
+                return rset.getInt("qty_in") > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -161,6 +162,5 @@ public class db_driver {
     static ArrayList<Book> getAll_books() {
         return all_books;
     }
-
 
 }

@@ -89,11 +89,14 @@ public class MainWindowController implements Initializable {
         } else {
             if (!BookNameSearchField.getText().isEmpty())
                 searchByName(BookNameSearchField.getText());
-            else if (!AuthorNameSearchField.getText().isEmpty())
+            if (!AuthorNameSearchField.getText().isEmpty())
                 searchByAuthor(AuthorNameSearchField.getText());
-            else if (!PriceSearchField.getText().isEmpty())
+            if (!PriceSearchField.getText().isEmpty())
                 searchByPrice(Double.parseDouble(PriceSearchField.getText()));
-            else {
+            else if (
+                    AuthorNameSearchField.getText().isEmpty() &&
+                            BookNameSearchField.getText().isEmpty()
+            ) {
                 LocalBooksList.clear();
                 LocalBooksList.addAll(getAll_books());
             }
@@ -103,7 +106,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void BuyBook() {
-        if(checkBookAval(LocalBooksList.get(current_index).getISBN()))
+        if (checkBookAval(LocalBooksList.get(current_index).getISBN()))
             buyBook(LocalBooksList.get(current_index).getISBN());
         else
             StatusLabel.setText("Sorry this book is currently out of stock");
